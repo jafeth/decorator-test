@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemManagerService } from './dynamic-forms/item-manager.service';
-import { ItemModel } from './dynamic-forms/items/item.model';
+
+import { ItemModel, ModelCategory, ModelManagerService } from 'cpx-form-factory';
+import { interval }                                      from 'rxjs';
+import { take }                                          from 'rxjs/operators';
 
 @Component( {
   selector   : 'app-root',
@@ -11,16 +13,23 @@ export class AppComponent implements OnInit {
   title = 'app';
   item: ItemModel;
 
-  constructor( private itemManager: ItemManagerService) {
+  private interval = interval( 1500 )
+    .pipe( take( 5 ) );
+
+  constructor( private modelManager: ModelManagerService ) {
 
   }
 
   public ngOnInit(): void {
-    this.item = this.itemManager.fromConfig({
-      type : 'woei',
-      key  : 'bla',
-      order: 1
-    });
+    this.interval.subscribe( i => {
+      this.item = this.modelManager.parseConfig( ModelCategory.Element, {
+        type : 'woei',
+        key  : 'bla',
+        order: i
+      } ) as ItemModel;
+
+      console.log( this.item );
+    } );
   }
 
 }

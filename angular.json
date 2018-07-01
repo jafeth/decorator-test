@@ -53,7 +53,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "decorator-test:build"
+            "browserTarget": "decorator-test:build",
+            "liveReload": false
           },
           "configurations": {
             "production": {
@@ -116,6 +117,46 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "cpx-form-factory": {
+      "root": "projects/cpx-form-factory",
+      "sourceRoot": "projects/cpx-form-factory/src",
+      "projectType": "library",
+      "prefix": "cpx",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/cpx-form-factory/tsconfig.lib.json",
+            "project": "projects/cpx-form-factory/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/cpx-form-factory/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/cpx-form-factory/src/test.ts",
+            "tsConfig": "projects/cpx-form-factory/tsconfig.spec.json",
+            "karmaConfig": "projects/cpx-form-factory/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/cpx-form-factory/tsconfig.lib.json",
+              "projects/cpx-form-factory/tsconfig.spec.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]

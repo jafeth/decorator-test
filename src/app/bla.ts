@@ -1,11 +1,13 @@
-import { ManageItemAs } from './dynamic-forms/decorators/manage-item-as.decorator';
-import { InputItemModel } from './dynamic-forms/items/input-item.model';
+import { InputItemModel, ManageModelAs, ModelCategory, ValidatorCollection } from 'cpx-form-factory';
 
-@ManageItemAs<Bla>( 'woei' )
+@ManageModelAs<Bla>( ModelCategory.Element )
 export class Bla extends InputItemModel {
+  readonly type = 'woei';
   somethingElse: any = {};
 
-  static fromConfig( config: object ): Bla {
+  @ValidatorCollection() myValidators: object[];
+
+  static parseConfig( config: object ): Bla {
     return Object.assign( new Bla(), config );
   }
 }
