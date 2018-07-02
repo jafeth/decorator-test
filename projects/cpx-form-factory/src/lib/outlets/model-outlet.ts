@@ -3,8 +3,8 @@ import { AbstractControl }                                   from '@angular/form
 import { BehaviorSubject }                                   from 'rxjs';
 
 import { HostDirective } from '../host/host.directive';
-import { ModelBase }     from './model-base';
-import { ModelPortal }   from './model-portal';
+import { ModelBase }     from '../models/model-base';
+import { ModelPortal }   from '../portals/model-portal';
 
 export abstract class ModelOutlet<T extends ModelBase> implements OnInit, OnChanges, OnDestroy {
   public abstract model: T;

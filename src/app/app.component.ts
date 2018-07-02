@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit }                                                               from '@angular/core';
+import { AbstractControl, FormControl }                                                    from '@angular/forms';
+import { ControlManagerService, ItemModel, ModelBase, ModelCategory, ModelManagerService } from 'cpx-form-factory';
 
-import { ItemModel, ModelCategory, ModelManagerService } from 'cpx-form-factory';
-import { interval }                                      from 'rxjs';
-import { take }                                          from 'rxjs/operators';
+import { WoeiTemplate } from './woei-template';
 
 @Component( {
   selector   : 'app-root',
@@ -11,25 +11,50 @@ import { take }                                          from 'rxjs/operators';
 } )
 export class AppComponent implements OnInit {
   title = 'app';
-  item: ItemModel;
+  items: ItemModel[];
+  form: AbstractControl;
+  model: ModelBase;
 
-  private interval = interval( 1500 )
-    .pipe( take( 5 ) );
+  constructor( private modelManager: ModelManagerService, private controlManager: ControlManagerService ) {
+    const config = {
+      type : 'woei',
+      key  : 'group',
+      order: 0,
+      items: [
+        {
+          type        : 'bla',
+          order       : 2,
+          label       : 'First Element',
+          myValidators: [ { validator: 'required' } ],
+          key         : 'first'
+        },
+        {
+          type : 'bla',
+          order: 1,
+          label: 'Second Element',
+          key  : 'second'
+        },
+        {
+          type        : 'bla',
+          order       : 0,
+          label       : 'Third Element',
+          myValidators: [ { validator: 'required' } ],
+          key         : 'third'
+        }
 
-  constructor( private modelManager: ModelManagerService ) {
-
+      ]
+    };
+    this.model = this.modelManager.parseConfig( ModelCategory.Template, config );
   }
 
   public ngOnInit(): void {
-    this.interval.subscribe( i => {
-      this.item = this.modelManager.parseConfig( ModelCategory.Element, {
-        type : 'woei',
-        key  : 'bla',
-        order: i
-      } ) as ItemModel;
+    this.items = ( this.model as WoeiTemplate ).items;
+    this.form = this.controlManager.buildControl( this.model ) as FormControl;
 
-      console.log( this.item );
-    } );
+    this.form.valueChanges.subscribe( value => console.log( 'group observer', value ) );
+    this.form.get( 'second' )
+        .valueChanges
+        .subscribe( value => console.log( 'second control observer', value ) );
   }
 
 }

@@ -1,4 +1,5 @@
-<pre>
-  {{model | json}}
-</pre>
-<button type="button" (click)="doSomething()">Do Something</button>
+<div>
+<label>{{model.label}}
+  <input type="text" [formControl]="form">
+</label>
+</div>

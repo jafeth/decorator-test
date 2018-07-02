@@ -1,4 +1,4 @@
-import { ModelBase } from '../models/model-base';
+import { ModelBase } from './model-base';
 
 export abstract class TemplateModel extends ModelBase {
   uid: number;

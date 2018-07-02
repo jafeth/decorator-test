@@ -1,13 +1,13 @@
 import { Inject, Injectable, Type } from '@angular/core';
 
 import { MANAGED_MODELS }  from '../decorators/manage-model-as.decorator';
+import { ModelPortal }     from '../portals/model-portal';
+import { PortalCategory }  from '../portals/portal-type.enum';
 import { ValidatorConfig } from '../validators/validator-config';
 import { ModelBase }       from './model-base';
 import { ModelCategory }   from './model-category.enum';
 import { ModelMetadata }   from './model-metadata';
-import { ModelPortal }     from './model-portal';
 import { ModelType }       from './model-type';
-import { PortalCategory }  from './portal-type.enum';
 
 interface PreparedConfig {
   type: string;
@@ -63,11 +63,11 @@ export class ModelManagerService {
       if ( !config.hasOwnProperty( prop ) ) {
         continue;
       }
-      if ( metadata.modelCollections.has( prop ) ) {
-        prepared[ prop ] = this.buildModelCollection( metadata.modelCollections.get( prop ), config[ prop ] );
+      if ( metadata.modelCollection.property === prop ) {
+        prepared[ prop ] = this.buildModelCollection( metadata.modelCollection.category, config[ prop ] );
         continue;
       }
-      if ( metadata.validatorCollections.has( prop ) ) {
+      if ( metadata.validatorCollection.property === prop ) {
         prepared[ prop ] = this.buildValidatorCollection( config[ prop ] );
       }
 
@@ -81,7 +81,13 @@ export class ModelManagerService {
     if ( !Array.isArray( modelConfigurations ) ) {
       return [];
     }
-    return modelConfigurations.map( config => this.parseConfig( category, config ) );
+    return modelConfigurations
+      .map( ( config, index ) => ( {
+        order: config.hasOwnProperty( 'order' ) ? config[ 'order' ] : index,
+        model: this.parseConfig( category, config )
+      } ) )
+      .sort( ( a, b ) => a.order - b.order )
+      .map( item => item.model );
   }
 
   private buildValidatorCollection( validatorConfigurations: object[] ): ValidatorConfig[] {
@@ -100,8 +106,12 @@ export class ModelManagerService {
 
   private createPreparedConfig( metadata: ModelMetadata ): PreparedConfig {
     const prepared = { type: metadata.type };
-    metadata.modelCollections.forEach( prop => prepared[ prop ] = [] );
-    metadata.validatorCollections.forEach( prop => prepared[ prop ] = [] );
+    if ( metadata.modelCollection.property ) {
+      prepared[ metadata.modelCollection.property ] = [];
+    }
+    if ( metadata.validatorCollection.property ) {
+      prepared[ metadata.validatorCollection.property ] = [];
+    }
     return prepared;
   }
 

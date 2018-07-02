@@ -1,7 +1,7 @@
 import { tap } from 'rxjs/operators';
 
-import { ModelBase }   from './model-base';
-import { ModelOutlet } from './model-outlet';
+import { ModelBase }   from '../models/model-base';
+import { ModelOutlet } from '../outlets/model-outlet';
 
 const $$trackedProperties = Symbol( 'tracked properties' );
 const $$subscription = Symbol( 'subscription to the changes observable' );

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { ValidatorFn }        from '@angular/forms';
 import { MANAGED_VALIDATORS } from '../decorators/manage-validator.decorator';
-import { ValidatorConfig }    from './validator-config';
-import { ValidatorFactory }   from './validator-factory';
+import { ValidatorConfig }    from '../validators/validator-config';
+import { ValidatorFactory }   from '../validators/validator-factory';
 
 @Injectable( {
   providedIn: 'root'

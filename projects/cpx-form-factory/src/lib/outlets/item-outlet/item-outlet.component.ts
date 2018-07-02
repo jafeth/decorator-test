@@ -3,10 +3,10 @@ import { AbstractControl }                   from '@angular/forms';
 
 import { HostDirective }       from '../../host/host.directive';
 import { ModelManagerService } from '../../models/model-manager.service';
-import { ModelOutlet }         from '../../models/model-outlet';
-import { PortalCategory }      from '../../models/portal-type.enum';
-import { ItemModel }           from '../item.model';
-import { ItemPortal }          from '../item.portal';
+import { ModelOutlet }         from '../model-outlet';
+import { PortalCategory }      from '../../portals/portal-type.enum';
+import { ItemModel }           from '../../models/item.model';
+import { ItemPortal }          from '../../portals/item.portal';
 
 @Component( {
   selector   : 'cpx-item-outlet',

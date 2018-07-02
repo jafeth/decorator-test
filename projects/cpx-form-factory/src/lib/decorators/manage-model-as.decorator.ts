@@ -21,6 +21,7 @@ export function ManageModelAs<T extends ModelBase>( category: ModelCategory ): (
     if ( managedModels.has( modelPath ) ) {
       throw new Error( `${category} of : '${instance.type}' already declared!` );
     }
+
     const metadata = ModelMetadata.fromConstructor( cls );
     metadata.type = instance.type;
     metadata.category = category;

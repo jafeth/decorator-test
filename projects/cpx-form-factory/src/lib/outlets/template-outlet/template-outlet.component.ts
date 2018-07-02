@@ -2,10 +2,10 @@ import { Component, Input, Type, ViewChild } from '@angular/core';
 import { AbstractControl }                   from '@angular/forms';
 import { HostDirective }                     from '../../host/host.directive';
 import { ModelManagerService }               from '../../models/model-manager.service';
-import { ModelOutlet }                       from '../../models/model-outlet';
-import { PortalCategory }                    from '../../models/portal-type.enum';
-import { TemplateModel }                     from '../template-model';
-import { TemplatePortal }                    from '../template-portal';
+import { ModelOutlet }                       from '../model-outlet';
+import { PortalCategory }                    from '../../portals/portal-type.enum';
+import { TemplateModel }                     from '../../models/template-model';
+import { TemplatePortal }                    from '../../portals/template-portal';
 
 @Component( {
   selector   : 'cpx-template-outlet',

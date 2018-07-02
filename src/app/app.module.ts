@@ -3,14 +3,16 @@ import { BrowserModule }                             from '@angular/platform-bro
 import { BrowserAnimationsModule }                   from '@angular/platform-browser/animations';
 import { CpxFormFactoryModule, ValidatorContainers } from 'cpx-form-factory';
 
-import { AppComponent }     from './app.component';
-import { BlaComponent }     from './bla/bla.component';
-import { CustomValidators } from './custom-validators';
+import { AppComponent }          from './app.component';
+import { BlaComponent }          from './bla/bla.component';
+import { CustomValidators }      from './custom-validators';
+import { WoeiTemplateComponent } from './woei-template/woei-template.component';
 
 @NgModule( {
   declarations   : [
     AppComponent,
-    BlaComponent
+    BlaComponent,
+    WoeiTemplateComponent
   ],
   imports        : [
     BrowserModule,
@@ -18,7 +20,7 @@ import { CustomValidators } from './custom-validators';
     CpxFormFactoryModule
   ],
   providers      : [ { provide: ValidatorContainers, useValue: CustomValidators, multi: true } ],
-  entryComponents: [ BlaComponent ],
+  entryComponents: [ BlaComponent, WoeiTemplateComponent ],
   bootstrap      : [ AppComponent ]
 } )
 export class AppModule {
