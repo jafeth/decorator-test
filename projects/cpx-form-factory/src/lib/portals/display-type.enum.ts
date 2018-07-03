@@ -1,4 +1,4 @@
-export enum PortalCategory {
+export enum DisplayType {
   Presentation   = 'presentation',
   Administration = 'administration'
 }

@@ -1,10 +1,13 @@
-import { ControlType, FormKey, ItemModel, ManageModelAs, ModelCategory, ModelCollection } from 'cpx-form-factory';
+import { ControlKey, ControlType, ManageModel, ModelCategory, ModelCollection, TemplateModel } from 'cpx-form-factory';
 
-@ManageModelAs<WoeiTemplate>( ModelCategory.Template )
-export class WoeiTemplate extends ItemModel {
+@ManageModel<WoeiTemplate>( {
+  category   : ModelCategory.Template,
+  controlType: ControlType.Group
+} )
+export class WoeiTemplate extends TemplateModel {
   readonly type = 'woei';
-  @FormKey( ControlType.Group ) key: string;
-  @ModelCollection( ModelCategory.Element ) items: ItemModel[] = [];
+  @ControlKey() key: string;
+  @ModelCollection( ModelCategory.Element ) items: TemplateModel[] = [];
 
   static parseConfig( config: object ): WoeiTemplate {
     return Object.assign( new WoeiTemplate(), config );

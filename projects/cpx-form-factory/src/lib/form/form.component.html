@@ -1,3 +1,8 @@
-<p>
-  form works!
-</p>
+<form [formGroup]="form">
+  <cpx-template-outlet
+    [model]="template"
+    [form]="form"
+  >
+  </cpx-template-outlet>
+  <ng-content></ng-content>
+</form>

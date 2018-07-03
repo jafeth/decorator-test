@@ -1,10 +1,13 @@
-import { ControlType, FormKey, ItemModel, ManageModelAs, ModelCategory, ValidatorCollection } from 'cpx-form-factory';
+import { AbstractModel, ControlKey, ControlType, ManageModel, ModelCategory, ValidatorCollection } from 'cpx-form-factory';
 
-@ManageModelAs<Bla>( ModelCategory.Element )
-export class Bla extends ItemModel {
+@ManageModel<Bla>( {
+  category   : ModelCategory.Element,
+  controlType: ControlType.Input
+} )
+export class Bla extends AbstractModel {
   readonly type = 'bla';
   @ValidatorCollection() myValidators: object[];
-  @FormKey( ControlType.Input ) key: string;
+  @ControlKey() key: string;
   label: string;
   somethingElse: any = {};
 

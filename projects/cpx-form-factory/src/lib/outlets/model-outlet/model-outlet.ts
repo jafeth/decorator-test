@@ -2,14 +2,17 @@ import { OnChanges, OnDestroy, OnInit, SimpleChanges, Type } from '@angular/core
 import { AbstractControl }                                   from '@angular/forms';
 import { BehaviorSubject }                                   from 'rxjs';
 
-import { HostDirective } from '../host/host.directive';
-import { ModelBase }     from '../models/model-base';
-import { ModelPortal }   from '../portals/model-portal';
+import { HostDirective } from '../../host/host.directive';
+import { AbstractModel } from '../../models/abstract-model';
+import { ModelPortal }   from '../../portals/model-portal';
+import { DisplayType }   from '../../portals/display-type.enum';
 
-export abstract class ModelOutlet<T extends ModelBase> implements OnInit, OnChanges, OnDestroy {
+export abstract class ModelOutlet<T extends AbstractModel> implements OnInit, OnChanges, OnDestroy {
+  public abstract displayType: DisplayType;
   public abstract model: T;
   public abstract form: AbstractControl;
   public abstract host: HostDirective<ModelPortal<T>>;
+
   public abstract get componentType(): Type<ModelPortal<T>>;
 
   public changes$: BehaviorSubject<SimpleChanges>;

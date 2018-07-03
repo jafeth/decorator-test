@@ -1,6 +1,6 @@
-import { ModelBase } from './model-base';
+import { AbstractModel } from './abstract-model';
 
-export abstract class TemplateModel extends ModelBase {
+export abstract class TemplateModel extends AbstractModel {
   uid: number;
   title: string;
   description: string;

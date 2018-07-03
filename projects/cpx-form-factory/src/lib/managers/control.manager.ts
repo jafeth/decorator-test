@@ -1,19 +1,19 @@
 import { Injectable }                                                      from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
-import { ModelBase }               from '../models/model-base';
-import { ModelMetadata }           from '../models/model-metadata';
-import { ControlType }             from './control-type.enum';
-import { ValidatorManagerService } from './validator-manager.service';
+import { AbstractModel }    from '../models/abstract-model';
+import { ModelMetadata }    from '../models/model-metadata';
+import { ControlType }      from '../control-type.enum';
+import { ValidatorManager } from './validator.manager';
 
 @Injectable( {
   providedIn: 'root'
 } )
-export class ControlManagerService {
+export class ControlManager {
 
-  constructor( private validatorManager: ValidatorManagerService ) { }
+  constructor( private validatorManager: ValidatorManager ) { }
 
-  buildControl( model: ModelBase ): AbstractControl {
+  buildControl( model: AbstractModel ): AbstractControl {
     let control: AbstractControl;
     const { modelCollection, controlType } = ModelMetadata.fromInstance( model );
     switch ( controlType ) {
@@ -34,23 +34,23 @@ export class ControlManagerService {
     return control;
   }
 
-  private buildGroup( models: ModelBase[] ): FormGroup {
+  private buildGroup( models: AbstractModel[] ): FormGroup {
     const controls: { [ formKey: string ]: AbstractControl } = {};
     models.forEach( model => {
       const control = this.buildControl( model );
       if ( !control ) {
         return;
       }
-      const { formKey } = ModelMetadata.fromInstance( model );
-      if ( !model[ formKey ] ) {
+      const { controlKey } = ModelMetadata.fromInstance( model );
+      if ( !model[ controlKey ] ) {
         return;
       }
-      controls[ model[ formKey ] ] = control;
+      controls[ model[ controlKey ] ] = control;
     } );
     return new FormGroup( controls, { updateOn: 'blur' } );
   }
 
-  private buildArray( models: ModelBase[] ): FormArray {
+  private buildArray( models: AbstractModel[] ): FormArray {
     const controls: AbstractControl[] = [];
     models.forEach( model => {
       const control = this.buildControl( model );
@@ -62,7 +62,7 @@ export class ControlManagerService {
     return new FormArray( controls );
   }
 
-  private buildValidators( model: ModelBase ): ValidatorFn[] {
+  private buildValidators( model: AbstractModel ): ValidatorFn[] {
     const { property } = ModelMetadata.fromInstance( model ).validatorCollection;
     if ( !property ) {
       return [];

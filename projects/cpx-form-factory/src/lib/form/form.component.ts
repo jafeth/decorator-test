@@ -1,9 +1,12 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { AbstractControl }                            from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { AbstractControl }                                                  from '@angular/forms';
+import { Subject }                                                          from 'rxjs';
 
-import { ControlManagerService } from '../controls/control-manager.service';
-import { ModelBase }             from '../models/model-base';
-import { ModelManagerService }   from '../models/model-manager.service';
+import { ControlManager } from '../managers/control.manager';
+import { ModelManager }   from '../managers/model.manager';
+import { AbstractModel }  from '../models/abstract-model';
+import { ModelCategory }  from '../models/model-category.enum';
+import { FormEvent }      from './form-event';
 
 @Component( {
   selector   : 'cpx-form',
@@ -11,15 +14,47 @@ import { ModelManagerService }   from '../models/model-manager.service';
   styleUrls  : [ './form.component.css' ]
 } )
 export class FormComponent implements OnChanges {
-  @Input() config: any;
-  @Input() values: any;
+  @Input() config: object;
+  @Input() values: object;
+  @Output() action = new EventEmitter<FormEvent>();
 
-  template: ModelBase;
-  form: AbstractControl;
+  trigger$ = new Subject<FormEvent>();
 
-  constructor( private modelManager: ModelManagerService, private controlManager: ControlManagerService ) { }
-
-  public ngOnChanges( changes: SimpleChanges ): void {
+  get template(): AbstractModel {
+    if ( !this._template && this.config ) {
+      this._template = this.modelManager.parseConfig( ModelCategory.Template, this.config );
+    }
+    return this._template;
   }
 
+  get form(): AbstractControl {
+    if ( !this._form && this.template ) {
+      this._form = this.controlManager.buildControl( this.template );
+      this._form.patchValue( this.values || {} );
+    }
+    return this._form;
+  }
+
+  private _form: AbstractControl;
+  private _template: AbstractModel;
+
+  constructor( private modelManager: ModelManager, private controlManager: ControlManager ) { }
+
+  public ngOnChanges( changes: SimpleChanges ): void {
+    const { config, values } = changes;
+    if ( config ) {
+      this._template = null;
+      this._form = null;
+    }
+    if ( values && this.form ) {
+      this.form.patchValue( this.values );
+    }
+  }
+
+  public triggerAction( action: string ) {
+    const event = new FormEvent();
+    event.action = action;
+    event.rootForm = this.form;
+    this.trigger$.next( event );
+  }
 }

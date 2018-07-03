@@ -1,20 +1,20 @@
 import { Type }        from '@angular/core';
-import { ControlType } from '../controls/control-type.enum';
+import { ControlType } from '../control-type.enum';
+import { ModelPortal } from '../portals/model-portal';
+import { DisplayType } from '../portals/display-type.enum';
 
-import { ModelBase }      from './model-base';
-import { ModelCategory }  from './model-category.enum';
-import { ModelPortal }    from '../portals/model-portal';
-import { PortalCategory } from '../portals/portal-type.enum';
+import { AbstractModel } from './abstract-model';
+import { ModelCategory } from './model-category.enum';
 
 const $$modelMetadata = Symbol( 'model metadata' );
 
 export class ModelMetadata {
-  portals = new Map<PortalCategory, Type<ModelPortal<ModelBase>>>();
+  portals = new Map<DisplayType, Type<ModelPortal<AbstractModel>>>();
   validatorCollection: { property: string } = { property: null };
   modelCollection: { property: string, category: ModelCategory } = { property: null, category: null };
   type: string;
   category: ModelCategory;
-  formKey: string;
+  controlKey: string;
   controlType: ControlType = ControlType.NoControl;
 
   static fromClass( cls: object ): ModelMetadata {

@@ -1,4 +1,4 @@
-// import { ItemType } from 'cpx-form-factory';
+// import { ItemType } from 'cpx-rootForm-factory';
 // import { ItemModel } from './dynamic-forms/items/item.model';
 // import { InputItemModel } from './dynamic-forms/items/input-item.model';
 // import { displayPortal } from './dynamic-forms/decorators/display-portal-for.decorator';

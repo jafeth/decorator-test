@@ -1,8 +1,4 @@
-import { Component, OnInit }                                                               from '@angular/core';
-import { AbstractControl, FormControl }                                                    from '@angular/forms';
-import { ControlManagerService, ItemModel, ModelBase, ModelCategory, ModelManagerService } from 'cpx-form-factory';
-
-import { WoeiTemplate } from './woei-template';
+import { Component, OnInit } from '@angular/core';
 
 @Component( {
   selector   : 'app-root',
@@ -11,12 +7,10 @@ import { WoeiTemplate } from './woei-template';
 } )
 export class AppComponent implements OnInit {
   title = 'app';
-  items: ItemModel[];
-  form: AbstractControl;
-  model: ModelBase;
+  config: object;
 
-  constructor( private modelManager: ModelManagerService, private controlManager: ControlManagerService ) {
-    const config = {
+  constructor() {
+    this.config = {
       type : 'woei',
       key  : 'group',
       order: 0,
@@ -44,17 +38,14 @@ export class AppComponent implements OnInit {
 
       ]
     };
-    this.model = this.modelManager.parseConfig( ModelCategory.Template, config );
   }
 
   public ngOnInit(): void {
-    this.items = ( this.model as WoeiTemplate ).items;
-    this.form = this.controlManager.buildControl( this.model ) as FormControl;
+  }
 
-    this.form.valueChanges.subscribe( value => console.log( 'group observer', value ) );
-    this.form.get( 'second' )
-        .valueChanges
-        .subscribe( value => console.log( 'second control observer', value ) );
+  public onAction(event: any): void {
+    console.log('OnAction in the appComponent');
+    console.log(event);
   }
 
 }

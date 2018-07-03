@@ -1,24 +1,17 @@
 /*
- * Public API Surface of cpx-form-factory
+ * Public API Surface of cpx-rootForm-factory
  */
 export { CpxFormFactoryModule } from './lib/cpx-form-factory.module';
 
-// The base classes to extend to create an item
-export { ItemModel }      from './lib/models/item.model';
-export { ModelBase }      from './lib/models/model-base';
-
 // The interface to implement when creating the components for an item
-export { ItemPortal }  from './lib/portals/item.portal';
-export { ModelOutlet } from './lib/outlets/model-outlet';
+export { ModelPortal }    from './lib/portals/model-portal';
+export { TemplatePortal } from './lib/portals/template-portal';
+export { ModelOutlet }    from './lib/outlets/model-outlet/model-outlet';
 
-export { ManageModelAs }                         from './lib/decorators/manage-model-as.decorator';
-export { FormKey }                               from './lib/decorators/form-key.decorator';
-export { ManageValidator, ValidatorContainers }  from './lib/decorators/manage-validator.decorator';
-export { PresentationPortalFor }                 from './lib/decorators/presentation-portal-for.decorator';
-export { ValidatorCollection }                   from './lib/decorators/validator-collection.decorator';
-export { ModelCollection }                       from './lib/decorators/model-collection.decorator';
-export { ModelManagerService }                   from './lib/models/model-manager.service';
-export { ModelCategory }                         from './lib/models/model-category.enum';
-export { ValidatorManagerService }               from './lib/controls/validator-manager.service';
-export { ControlManagerService }                 from './lib/controls/control-manager.service';
-export { ControlType }                           from './lib/controls/control-type.enum';
+export * from './lib/models/public_api';
+export * from './lib/decorators/public_api';
+
+export { FormComponent } from './lib/form/form.component';
+export { FormEvent }     from './lib/form/form-event';
+export { ModelCategory } from './lib/models/model-category.enum';
+export { ControlType }   from './lib/control-type.enum';

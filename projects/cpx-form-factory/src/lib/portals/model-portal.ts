@@ -1,16 +1,23 @@
-import { tap } from 'rxjs/operators';
+import { AbstractControl } from '@angular/forms';
+import { Subscription }    from 'rxjs';
+import { tap }             from 'rxjs/operators';
 
-import { ModelBase }   from '../models/model-base';
-import { ModelOutlet } from '../outlets/model-outlet';
+import { AbstractModel } from '../models/abstract-model';
+import { ModelOutlet }   from '../outlets/model-outlet/model-outlet';
+import { DisplayType }   from './display-type.enum';
 
 const $$trackedProperties = Symbol( 'tracked properties' );
-const $$subscription = Symbol( 'subscription to the changes observable' );
+export const $$subscriptions = Symbol( 'subscriptions' );
 
-export abstract class ModelPortal<T extends ModelBase> {
+export abstract class ModelPortal<T extends AbstractModel> {
   abstract model: T;
+  form: AbstractControl;
+  displayType: DisplayType;
+  protected [ $$subscriptions ]: Subscription[] = [];
 
   public attachTo( outlet: ModelOutlet<T> ): void {
     this[ $$trackedProperties ] = new Set( [] );
+
     const onChange = outlet.changes$.pipe(
       tap( changes => {
         for ( const prop in changes ) {
@@ -25,17 +32,16 @@ export abstract class ModelPortal<T extends ModelBase> {
       } )
     );
 
-    this[ $$subscription ] = onChange.subscribe( changes => {
+    this[ $$subscriptions ].push( onChange.subscribe( changes => {
       if ( !( 'ngOnChanges' in this ) ) {
         return;
       }
       this[ 'ngOnChanges' ]( changes );
-    } );
+    } ) );
   }
 
   public detachFrom( outlet: ModelOutlet<T> ): void {
-    if ( $$subscription in this ) {
-      this[ $$subscription ].unsubscribe();
-    }
+    this[ $$subscriptions ].forEach( subscription => subscription.unsubscribe() );
+    this[ $$subscriptions ] = [];
   }
 }

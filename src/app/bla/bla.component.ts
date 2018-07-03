@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl }                             from '@angular/forms';
-import { ItemPortal, PresentationPortalFor }           from 'cpx-form-factory';
+import { ModelPortal, PresentationFor }                from 'cpx-form-factory';
 
 import { Bla } from '../bla';
 
@@ -9,8 +9,8 @@ import { Bla } from '../bla';
   templateUrl: './bla.component.html',
   styleUrls  : [ './bla.component.css' ]
 } )
-@PresentationPortalFor( Bla )
-export class BlaComponent extends ItemPortal<Bla> implements OnInit, OnChanges {
+@PresentationFor( Bla )
+export class BlaComponent extends ModelPortal<Bla> implements OnInit, OnChanges {
   model: Bla;
   form: AbstractControl;
 

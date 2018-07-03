@@ -7,7 +7,7 @@ import { ValidatorFactory }   from '../validators/validator-factory';
 @Injectable( {
   providedIn: 'root'
 } )
-export class ValidatorManagerService {
+export class ValidatorManager {
 
   constructor( @Inject( MANAGED_VALIDATORS ) private validators: Map<string, ValidatorFactory> ) { }
 

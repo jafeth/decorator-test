@@ -1,13 +1,13 @@
 import { Inject, Injectable, Type } from '@angular/core';
 
-import { MANAGED_MODELS }  from '../decorators/manage-model-as.decorator';
+import { MANAGED_MODELS }  from '../decorators/manage-model.decorator';
 import { ModelPortal }     from '../portals/model-portal';
-import { PortalCategory }  from '../portals/portal-type.enum';
+import { DisplayType }     from '../portals/display-type.enum';
 import { ValidatorConfig } from '../validators/validator-config';
-import { ModelBase }       from './model-base';
-import { ModelCategory }   from './model-category.enum';
-import { ModelMetadata }   from './model-metadata';
-import { ModelType }       from './model-type';
+import { AbstractModel }   from '../models/abstract-model';
+import { ModelCategory }   from '../models/model-category.enum';
+import { ModelMetadata }   from '../models/model-metadata';
+import { ModelType }       from '../models/model-type';
 
 interface PreparedConfig {
   type: string;
@@ -18,18 +18,18 @@ interface PreparedConfig {
 @Injectable( {
   providedIn: 'root'
 } )
-export class ModelManagerService {
-  constructor( @Inject( MANAGED_MODELS ) private models: Map<string, ModelType<ModelBase>> ) { }
+export class ModelManager {
+  constructor( @Inject( MANAGED_MODELS ) private models: Map<string, ModelType<AbstractModel>> ) { }
 
   has( category: ModelCategory, type: string ): boolean {
     return this.models.has( this.buildModelPath( category, type ) );
   }
 
-  get( category: ModelCategory, type: string ): ModelType<ModelBase> {
+  get( category: ModelCategory, type: string ): ModelType<AbstractModel> {
     return this.models.get( this.buildModelPath( category, type ) );
   }
 
-  parseConfig( category: ModelCategory, config: object ): ModelBase {
+  parseConfig( category: ModelCategory, config: object ): AbstractModel {
     if ( !config.hasOwnProperty( 'type' ) ) {
       throw new Error( `Type property not defined on config: ${config}` );
     }
@@ -42,32 +42,33 @@ export class ModelManagerService {
     return cls.parseConfig( this.prepareConfig( cls, config ) );
   }
 
-  portalFor( model: ModelBase, category: PortalCategory = PortalCategory.Presentation ): Type<ModelPortal<any>> {
+  portalFor( model: AbstractModel, portalType: DisplayType = DisplayType.Presentation ): Type<ModelPortal<any>> {
     if ( !model ) {
       return null;
     }
-    const metadata = ModelMetadata.fromInstance( model );
-    if ( !this.has( metadata.category, metadata.type ) ) {
+    const { portals, category, type } = ModelMetadata.fromInstance( model );
+    if ( !this.has( category, type ) ) {
       throw new Error( `Model is not managed` );
     }
-    if ( !metadata.portals.has( category ) ) {
-      throw new Error( `No ${category} portal associated to ${metadata.category} of type ${metadata.type}` );
+    if ( !portals.has( portalType ) ) {
+      throw new Error( `No ${category} portal associated to ${category} of type ${type}` );
     }
-    return metadata.portals.get( category );
+    return portals.get( portalType );
   }
 
-  private prepareConfig( constructor: ModelType<ModelBase>, config: object ): PreparedConfig {
+  private prepareConfig( constructor: ModelType<AbstractModel>, config: object ): PreparedConfig {
     const metadata = ModelMetadata.fromConstructor( constructor );
     const prepared = this.createPreparedConfig( metadata );
+    const { modelCollection, validatorCollection } = metadata;
     for ( const prop in config ) {
       if ( !config.hasOwnProperty( prop ) ) {
         continue;
       }
-      if ( metadata.modelCollection.property === prop ) {
-        prepared[ prop ] = this.buildModelCollection( metadata.modelCollection.category, config[ prop ] );
+      if ( modelCollection.property === prop ) {
+        prepared[ prop ] = this.buildModelCollection( modelCollection.category, config[ prop ] );
         continue;
       }
-      if ( metadata.validatorCollection.property === prop ) {
+      if ( validatorCollection.property === prop ) {
         prepared[ prop ] = this.buildValidatorCollection( config[ prop ] );
       }
 
@@ -77,7 +78,7 @@ export class ModelManagerService {
     return prepared;
   }
 
-  private buildModelCollection( category: ModelCategory, modelConfigurations: object[] ): ModelBase[] {
+  private buildModelCollection( category: ModelCategory, modelConfigurations: object[] ): AbstractModel[] {
     if ( !Array.isArray( modelConfigurations ) ) {
       return [];
     }
@@ -105,12 +106,13 @@ export class ModelManagerService {
   }
 
   private createPreparedConfig( metadata: ModelMetadata ): PreparedConfig {
-    const prepared = { type: metadata.type };
-    if ( metadata.modelCollection.property ) {
-      prepared[ metadata.modelCollection.property ] = [];
+    const { modelCollection, validatorCollection, type } = metadata;
+    const prepared = { type: type };
+    if ( modelCollection.property ) {
+      prepared[ modelCollection.property ] = [];
     }
-    if ( metadata.validatorCollection.property ) {
-      prepared[ metadata.validatorCollection.property ] = [];
+    if ( validatorCollection.property ) {
+      prepared[ validatorCollection.property ] = [];
     }
     return prepared;
   }
