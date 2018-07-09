@@ -19,11 +19,11 @@
       "dom"
     ],
     "paths": {
-      "cpx-form-factory": [
-        "dist/cpx-form-factory"
+      "@carapax/form-factory": [
+        "dist/@carapax/form-factory"
       ],
-      "cpx-form-factory/*": [
-        "dist/cpx-form-factory/*"
+      "@carapax/form-factory/*": [
+        "dist/@carapax/form-factory/*"
       ]
     }
   }

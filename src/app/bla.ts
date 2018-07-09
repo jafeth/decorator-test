@@ -1,4 +1,4 @@
-import { AbstractModel, ControlKey, ControlType, ManageModel, ModelCategory, ValidatorCollection } from 'cpx-form-factory';
+import { AbstractModel, ControlKey, ControlType, ManageModel, ModelCategory, ValidatorCollection } from '@carapax/form-factory';
 
 @ManageModel<Bla>( {
   category   : ModelCategory.Element,

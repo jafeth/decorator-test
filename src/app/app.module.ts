@@ -1,7 +1,7 @@
 import { NgModule }                                  from '@angular/core';
 import { BrowserModule }                             from '@angular/platform-browser';
 import { BrowserAnimationsModule }                   from '@angular/platform-browser/animations';
-import { CpxFormFactoryModule, ValidatorContainers } from 'cpx-form-factory';
+import { CpxFormFactoryModule, ValidatorContainers } from '@carapax/form-factory';
 
 import { AppComponent }          from './app.component';
 import { BlaComponent }          from './bla/bla.component';

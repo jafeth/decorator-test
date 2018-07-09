@@ -1,5 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { ManageValidator }                                from 'cpx-form-factory';
+import { ManageValidator }                                from '@carapax/form-factory';
 
 export class CustomValidators {
 

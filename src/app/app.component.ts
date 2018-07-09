@@ -9,6 +9,8 @@ export class AppComponent implements OnInit {
   title = 'app';
   config: object;
 
+  btnAction = 'next';
+
   constructor() {
     this.config = {
       type : 'woei',
@@ -19,7 +21,7 @@ export class AppComponent implements OnInit {
           type        : 'bla',
           order       : 2,
           label       : 'First Element',
-          myValidators: [ { validator: 'required' } ],
+          myValidators: [ { validator: 'required' }, { validator: 'min', parameters: { min: 1 } } ],
           key         : 'first'
         },
         {
@@ -43,9 +45,23 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
   }
 
-  public onAction(event: any): void {
-    console.log('OnAction in the appComponent');
-    console.log(event);
+  public onReaction( event: any ): void {
+    console.log( 'OnReaction in the appComponent' );
+    console.log( event );
+  }
+
+  public onNext( event: any ) {
+    switch ( this.btnAction ) {
+      case 'next':
+        this.btnAction = 'previous';
+        break;
+      case 'previous':
+        this.btnAction = 'next';
+        break;
+    }
+
+    console.log( 'OnNext clicked' );
+    console.log( event );
   }
 
 }

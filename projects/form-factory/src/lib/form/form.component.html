@@ -1,0 +1,9 @@
+<form [formGroup]="form">
+  <ng-content select=".above-cpx-form"></ng-content>
+  <cpx-form-outlet
+    [model]="model"
+    [form]="form"
+  >
+  </cpx-form-outlet>
+  <ng-content></ng-content>
+</form>
